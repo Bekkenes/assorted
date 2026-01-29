@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Nagare",
+  "version": "2.2",
+  "description": "Nagare: A flow-based, minimalist startpage.",
+  "chrome_url_overrides": {
+    "newtab": "launcher.html"
+  },
+  "permissions": [
+    "bookmarks",
+    "geolocation",
+    "storage",
+    "unlimitedStorage"
+  ],
+  "host_permissions": [
+    "https://api.open-meteo.com/*",
+    "https://geocoding-api.open-meteo.com/*"
+  ],
+  "action": {
+    "default_icon": "icon.png"
+  }
+}
