@@ -1,0 +1,138 @@
+:root {
+    --bg-color: #121212;
+    --modal-bg: #1e1e1e;
+    --text-primary: #ffffff;
+    --text-secondary: #eeeeee; /* Made lighter for better contrast on images */
+    --accent: #ffffff;
+    --font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    /* Wallpaper properties */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    
+    color: var(--text-primary);
+    font-family: var(--font-stack);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+}
+
+/* Dark overlay to ensure text is readable on any wallpaper */
+.bg-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* 40% dark tint */
+    z-index: -1;
+    pointer-events: none;
+}
+
+.container {
+    flex-grow: 1;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    max-width: 600px;
+    z-index: 1;
+}
+
+/* Widgets */
+.widget-area { margin-bottom: 40px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.clock { font-size: 4rem; font-weight: 300; letter-spacing: -2px; }
+.date { font-size: 1.2rem; color: var(--text-secondary); margin-top: 5px; }
+.weather-mock { font-size: 0.9rem; color: var(--text-secondary); margin-top: 5px; opacity: 0.9; cursor: pointer; }
+.weather-mock:hover { opacity: 1; text-decoration: underline; }
+
+/* Apps */
+.app-item, .fav-item {
+    display: block;
+    text-decoration: none;
+    color: var(--text-primary);
+    padding: 12px 0;
+    font-size: 1.5rem;
+    transition: transform 0.2s, opacity 0.2s;
+    cursor: pointer;
+    opacity: 0.9;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Shadow for readability */
+}
+.app-item:hover, .fav-item:hover { transform: translateX(10px); opacity: 1; }
+.fav-item { font-weight: 600; }
+
+.app-list {
+    margin-top: 20px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    flex-grow: 1;
+}
+.app-list::-webkit-scrollbar { display: none; }
+
+/* Alphabet Sidebar */
+.alphabet-scroll {
+    position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; align-items: center; z-index: 100;
+}
+.letter {
+    font-size: 0.75rem; color: var(--text-secondary); padding: 2px 10px;
+    user-select: none; transition: all 0.15s ease; cursor: pointer;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+.letter:hover { color: var(--accent); transform: scale(2) translateX(-10px); }
+
+/* Settings Modal */
+.settings-trigger {
+    position: fixed; bottom: 20px; right: 20px;
+    font-size: 1.5rem; cursor: pointer; opacity: 0.5; transition: opacity 0.2s;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    z-index: 10;
+}
+.settings-trigger:hover { opacity: 1; }
+
+.hidden { display: none !important; }
+
+.modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(10px); /* Stronger blur on modal bg */
+}
+
+.modal-content {
+    background: var(--modal-bg);
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.section { margin-bottom: 20px; }
+.row { display: flex; gap: 10px; margin-top: 10px; }
+input { background: #333; border: none; color: white; padding: 8px; flex-grow: 1; border-radius: 4px; }
+button { background: #444; border: none; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
+button:hover { background: #555; }
+.hint { font-size: 0.8rem; color: #888; margin-bottom: 10px; }
+.status-text { font-size: 0.8rem; color: #aaa; margin-top: 5px; }
+
+.bookmark-picker {
+    border: 1px solid #333;
+    padding: 10px;
+    height: 150px;
+    overflow-y: auto;
+    border-radius: 4px;
+}
+.bm-item { display: flex; align-items: center; padding: 5px; font-size: 0.9rem; }
+.bm-item input { flex-grow: 0; margin-right: 10px; }
+.close-btn { background: white; color: black; align-self: flex-end; font-weight: bold; margin-top: 10px; }
