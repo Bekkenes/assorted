@@ -31,30 +31,40 @@
             <h2>Nagare Settings</h2>
             
             <div class="section">
-                <h3>Appearance</h3>
-                <p class="hint">Upload an image to set as background.</p>
+                <h3>Add Custom App</h3>
                 <div class="row">
-                    <button id="btn-upload-bg">🖼️ Upload Wallpaper</button>
-                    <button id="btn-reset-bg">Reset to Dark</button>
+                    <input type="text" id="custom-name" placeholder="Name (e.g. Work)" style="flex: 1;">
+                    <input type="text" id="custom-url" placeholder="URL (e.g. notion.so)" style="flex: 2;">
+                    <button id="btn-add-custom">Add</button>
+                </div>
+                <div id="add-status" class="status-text"></div>
+            </div>
+
+            <div class="section">
+                <h3>Your Active Apps</h3>
+                <p class="hint">Click X to remove an app.</p>
+                <div id="active-apps-list" class="bookmark-picker" style="height: 120px;">
+                    </div>
+            </div>
+
+            <div class="section">
+                <h3>Select from Bookmarks</h3>
+                <div id="bookmark-picker" class="bookmark-picker"></div>
+            </div>
+
+            <div class="section">
+                <h3>Appearance & Weather</h3>
+                <div class="row">
+                    <button id="btn-upload-bg">🖼️ Wallpaper</button>
+                    <button id="btn-reset-bg">Reset</button>
+                    <button id="btn-auto-loc">📍 GPS Weather</button>
                     <input type="file" id="wallpaper-input" accept="image/*" style="display: none;">
                 </div>
-                <div id="bg-status" class="status-text"></div>
-            </div>
-
-            <div class="section">
-                <h3>Weather Location</h3>
-                <div class="row">
-                    <button id="btn-auto-loc">📍 Use GPS</button>
-                    <input type="text" id="manual-loc-input" placeholder="City name (e.g. Oslo)">
-                    <button id="btn-manual-loc">Search</button>
-                </div>
-                <div id="loc-status" class="status-text"></div>
-            </div>
-
-            <div class="section">
-                <h3>Select Apps</h3>
-                <p class="hint">Select bookmarks to display on your home screen.</p>
-                <div id="bookmark-picker" class="bookmark-picker"></div>
+                 <div class="row" style="margin-top: 5px;">
+                     <input type="text" id="manual-loc-input" placeholder="Or type City Name">
+                     <button id="btn-manual-loc">Set City</button>
+                 </div>
+                <div id="status-msg" class="status-text"></div>
             </div>
 
             <button id="close-settings" class="close-btn">Done</button>
