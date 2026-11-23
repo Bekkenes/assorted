@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Nagare",
-  "version": "2.2",
+  "version": "2.3",
   "description": "Nagare: A flow-based, minimalist startpage.",
   "chrome_url_overrides": {
     "newtab": "launcher.html"

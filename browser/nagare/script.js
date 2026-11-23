@@ -43,6 +43,7 @@ async function renderWeather() {
 async function fetchWeather(lat, lon) {
     try {
         const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         const temp = Math.round(data.current_weather.temperature);
         const condition = getWeatherString(data.current_weather.weathercode);
@@ -116,6 +117,9 @@ function initSettings() {
         }
     };
     document.getElementById('settings-btn').onclick = toggle;
+    document.getElementById('weather').onclick = () => {
+        if (modal.classList.contains('hidden')) toggle();
+    };
     document.getElementById('close-settings').onclick = toggle;
 
     // 1. ADD CUSTOM APP
@@ -137,6 +141,10 @@ function initSettings() {
             url = 'https://' + url;
         }
 
+        if (selectedApps.some(a => a.url === url)) {
+            status.textContent = "That URL is already in your apps.";
+            return;
+        }
         selectedApps.push({ title: name, url: url });
         chrome.storage.local.set({ savedApps: selectedApps });
         
@@ -172,17 +180,26 @@ function initSettings() {
     };
 
     document.getElementById('btn-manual-loc').onclick = async () => {
-        const q = document.getElementById('manual-loc-input').value;
+        const q = document.getElementById('manual-loc-input').value.trim();
+        const status = document.getElementById('status-msg');
         if(!q) return;
-        const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${q}&count=1&language=en&format=json`);
-        const data = await res.json();
-        if(data.results?.[0]) {
-            const loc = data.results[0];
-            weatherConfig = { useAuto:false, lat:loc.latitude, lon:loc.longitude, city:loc.name };
-            chrome.storage.local.set({ weatherConfig });
-            renderWeather();
-            document.getElementById('status-msg').textContent = `Found ${loc.name}`;
+        let data;
+        try {
+            const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=1&language=en&format=json`);
+            data = await res.json();
+        } catch (e) {
+            status.textContent = "Could not reach the location service";
+            return;
         }
+        if(!data.results?.[0]) {
+            status.textContent = `No place found for "${q}"`;
+            return;
+        }
+        const loc = data.results[0];
+        weatherConfig = { useAuto:false, lat:loc.latitude, lon:loc.longitude, city:loc.name };
+        chrome.storage.local.set({ weatherConfig });
+        renderWeather();
+        status.textContent = `Found ${loc.name}`;
     };
 }
 
@@ -260,10 +277,15 @@ function loadBookmarkTree() {
 }
 
 function getWeatherString(code) {
+    // WMO weather codes as used by Open-Meteo
     if (code === 0) return "Clear";
-    if (code < 3) return "Clouds";
-    if (code < 50) return "Fog";
-    if (code < 80) return "Rain";
-    if (code < 95) return "Storm";
-    return "Snow";
+    if (code <= 3) return "Clouds";
+    if (code === 45 || code === 48) return "Fog";
+    if (code >= 51 && code <= 57) return "Drizzle";
+    if (code >= 61 && code <= 67) return "Rain";
+    if (code >= 71 && code <= 77) return "Snow";
+    if (code >= 80 && code <= 82) return "Showers";
+    if (code === 85 || code === 86) return "Snow";
+    if (code >= 95) return "Storm";
+    return "Unknown";
 }
